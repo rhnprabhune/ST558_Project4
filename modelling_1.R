@@ -4,7 +4,19 @@ library(kableExtra)
 data <- read_csv("data/heart.csv")
 data$ca <- ordered(as.factor(data$ca),
                        levels = c("0","1","2","3"))
-names(data)
+#Tibble for printing ease
+og <- c("sex","cp","fbs","restecg","thal","exang","ca","age","trestbps","chol",
+        "thalach","oldpeak")
+new <- c("gender","cp_type","fbs_type","restecg_type","thal_type",
+         "exang_type","ca","age","trestbps","chol","thalach","oldpeak")
+print_string <- c("Sex","Chest Pain Type","Fasting blood sugar",
+                  "Resting ECG result","Blood disorder(thalassemia)",
+                  "Exercise induced angina",
+                  "Number of major vessels colored by flourosopy","Age",
+                  "Resting Blood Pressure","Serum cholestoral in mg/dl",
+                  "Maximum heart rate",
+                  "ST depression induced by exercise relative to rest")
+ct_tibble <- tibble(og,new,print_string)
 #---------------------------------------------------------------------
 #Split data
 set.seed(52)
@@ -68,25 +80,13 @@ predictor_table <- apply(df_summary, MARGIN = 2,FUN = summary, na.rm = TRUE)
 predictor_table %>%
   kbl(caption="Summary table for predictor variables") %>%
   kable_classic(full_width = F)
-#----------------------------------------------------------------------
-#Tibble for printing ease
-og <- c("sex","cp","fbs","restecg","thal","exang","ca","age","trestbps","chol",
-        "thalach","oldpeak")
-new <- c("gender","cp_type","fbs_type","restecg_type","thal_type",
-         "exang_type","ca","age","trestbps","chol","thalach","oldpeak")
-print_string <- c("Sex","Chest Pain Type","Fasting blood sugar",
-                  "Resting ECG result","Blood disorder(thalassemia)",
-                  "Exercise induced angina",
-                  "Number of major vessels colored by flourosopy","Age",
-                  "Resting Blood Pressure","Serum cholestoral in mg/dl",
-                  "Maximum heart rate",
-                  "ST depression induced by exercise relative to rest")
-ct_tibble <- tibble(og,new,print_string)
+
+
 #---------------------------------------------------------------------
 # EDA - Contingency Tables
 
 input_eda1 = "sex"
-input_eda2 = "ca"
+input_eda2 = "cp"
 
 input_eda1_type <- ct_tibble[og==input_eda1,]$new
 input_eda1_str <- ct_tibble[og==input_eda1,]$print_string
