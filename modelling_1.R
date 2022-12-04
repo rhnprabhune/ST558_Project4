@@ -1,5 +1,6 @@
 library(tidyverse)
-library(kableExtra)
+library(corrplot)
+library(caret)
 
 data <- read_csv("data/heart.csv")
 data$ca <- ordered(as.factor(data$ca),
@@ -194,7 +195,7 @@ ggplot(train_df,aes_string(x=input_target_type,fill=target_variable)) +
 
 # slider - 2 to 5 with 0.5 step
 input_scatter_size = 2
-input_target_num1 = "age" # X axis
+input_target_num1 = "oldpeak" # X axis
 input_target_num2 = "trestbps" # Y axis
 input_target_num3 = "sex" # Categorical variable
 target_type_str = "target_type"
@@ -213,7 +214,13 @@ ggplot(train_df,aes_string(x=input_target_num1,y=input_target_num2)) +
                     input_target_num_str1))
 #---------------------------------------------------------------------  
 
+all_corr = cor(select_if(train_df, is.numeric), method = c("spearman"))
+correlated_varaibles <- findCorrelation(all_corr,cutoff = 0.3,
+                                        verbose=FALSE,names=TRUE,exact=TRUE)
 
+corr_data1 <- train_df %>% select(age,trestbps,chol,thalach,oldpeak)
+corr1 = cor(corr_data1,method = c("spearman"))
+corrplot(corr1,diag=FALSE)
 
 
 

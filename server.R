@@ -1,8 +1,9 @@
 library(shiny)
 library(shinydashboard)
 library(tidyverse)
-library(kableExtra)
 library(DT)
+library(corrplot)
+library(caret)
 
 data <- read_csv("data/heart.csv")
 data$ca <- ordered(as.factor(data$ca),
@@ -254,4 +255,59 @@ function(input, output, session) {
   output$cat_thal <- renderPlot({cat_thal})
   output$cat_fbs <- renderPlot({cat_fbs})
   output$cat_exang <- renderPlot({cat_exang})
+  
+  #4. Scatter plot
+  #EDA with Target variable (Numerical variables)
+  
+  output$scatter <- renderPlot({
+    target_type_str = "target_type"
+    input_target_num_str1 <- ct_tibble[og==input$scatter_var1,]$print_string
+    input_target_num_str2 <- ct_tibble[og==input$scatter_var2,]$print_string
+    input_target_num3_type <- ct_tibble[og==input$scatter_var3,]$new
+    input_target_num_str3 <- ct_tibble[og==input$scatter_var3,]$print_string
+    
+    ggplot(train_df,aes_string(x=input$scatter_var1,y=input$scatter_var2)) + 
+      geom_point(aes_string(color=input_target_num3_type,shape=target_type_str),
+                 size=input$slider) + geom_smooth(method = "lm") + 
+      scale_color_discrete(name = input_target_num_str3) + 
+      scale_shape_discrete(name = "Heart Disease") +
+      labs(x =input_target_num_str1,y=input_target_num_str2,
+           title=paste0("Scatter plot for ",input_target_num_str2," vs ",
+                        input_target_num_str1)) +
+      theme(text=element_text(size=15))
+  })
+  
+  #5. EDA with Target variable (Categorical variables)
+  output$Bar_taget <- renderPlot({
+    input_target_cat = input$bar_var
+    target_variable = "target_type"
+    input_target_type <- ct_tibble[og==input_target_cat,]$new
+    input_target_str <- ct_tibble[og==input_target_cat,]$print_string
+    
+    ggplot(train_df,aes_string(x=input_target_type,fill=target_variable)) + 
+      geom_bar(position = "dodge",width=0.5) +
+      scale_fill_discrete(name = "Heart Disease") +
+      labs(x =input_target_str,y="Count",
+           title=paste0("Heart disease based on ",input_target_str)) +
+      theme(text=element_text(size=13), plot.title = element_text(hjust = 0.5))+
+      geom_text(aes(label = ..count..), stat = "count", vjust = -0.5,
+                position = position_dodge(width = 0.5))
+  })
+  
+  #6. Correlation plot
+  output$corrplot <- renderPlot({
+    corr_data1 <- train_df %>% select(age,trestbps,chol,thalach,oldpeak)
+    corr1 = cor(corr_data1,method = c("spearman"))
+    corrplot(corr1,diag=FALSE)
+    
+  })
+  
+  #7. About - Image
+  output$img <- renderImage({
+    filename <- normalizePath(file.path('./images',"ecg2.png"))
+    # Return a list containing the filename and alt text
+    list(src = filename,
+         alt = "ECG image",width=1000,height=300)
+  }, deleteFile = FALSE)
+
 }

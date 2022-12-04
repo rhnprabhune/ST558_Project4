@@ -14,6 +14,34 @@ dashboardPage(skin = "red",
   ),
   dashboardBody(
     tabItems(
+     tabItem(tabName = "about",
+      fluidRow(
+        column(12,align="center",div(style="margin:0%"),
+            imageOutput("img")
+        )
+      ),
+      fluidRow(
+        column(3),
+        column(6,align = "center",
+               box(width=NULL,height=45,title="About this app",background="red")
+        ),
+        column(3)
+      ),
+      fluidRow(
+        column(4,
+          box(width=NULL,title="Purpose of the App",
+          )
+        ),
+        column(4,
+          box(width=NULL,title="Data",
+          )
+        ),
+        column(4,
+          box(width=NULL,title="Tab Description",
+          )
+        )
+      )
+     ),
      tabItem(tabName = "data_exp",
       fluidRow(
        column(3,
@@ -60,12 +88,12 @@ dashboardPage(skin = "red",
         )
       ),
       fluidRow(
-        column(1,
+        column(1
         ),
         column(10,align = "center",
                box(width=NULL,height=45,title="Quantitative Data Graphs",background="red")
         ),
-        column(1,
+        column(1
         )
       ),
       fluidRow(
@@ -73,7 +101,7 @@ dashboardPage(skin = "red",
           box(width=NULL,title="Plots for numerical variables",
             selectInput("box_or_hist","Select the kinds of plots you want to see",
                         c("Only Boxplots"="box_only","Only Histograms"="hist_only",
-                          "Both Box plots and Histograms"="both_box_hist"),selected="box_only")
+                          "Both Box plots and Histograms"="both_box_hist"),selected="both_box_hist")
           )       
         ),
         column(5,
@@ -112,12 +140,12 @@ dashboardPage(skin = "red",
         )
       ),
       fluidRow(
-        column(1,
+        column(1
         ),
         column(10,align = "center",
                box(width=NULL,height=45,title="Categorical Data Graphs",background="red")
         ),
-        column(1,
+        column(1
         )
       ),
       fluidRow(
@@ -130,7 +158,8 @@ dashboardPage(skin = "red",
                                  "Resting ECG"="restecg",
                                  "Blood disorder(thalassemia)"="thal",
                                  "Execrcise induced Angina"="exang",
-                                 "Major vessels colored by flourosopy"="ca"))
+                                 "Major vessels colored by flourosopy"="ca"),
+                               selected=c("cp","fbs","restecg","thal","exang","ca"))
           )
         ),
         column(10,
@@ -172,10 +201,79 @@ dashboardPage(skin = "red",
             )
           )
         )
+      ),
+      fluidRow(
+        column(1
+        ),
+        column(10,align = "center",
+               box(width=NULL,height=45,title="Exploratory Data Analysis with target variable",background="red")
+        ),
+        column(1
+        )
+      ),
+      fluidRow(
+        column(3,
+          box(width=NULL,title="Scatter plot",
+              selectInput("scatter_var1","Select the numerical variable on x-axis",
+                          c("Age"="age","Resting Blood Pressure"="trestbps",
+                            "Cholestrol"="chol","Max. Heart Rate"="thalach",
+                            "Old peak"="oldpeak"),selected="age"),
+              selectInput("scatter_var2","Select the numerical variable on y-axis",
+                          c("Age"="age","Resting Blood Pressure"="trestbps",
+                            "Cholestrol"="chol","Max. Heart Rate"="thalach",
+                            "Old peak"="oldpeak"),selected="trestbps"),
+              selectInput("scatter_var3","Select by categorical variable for color",
+                          c("Gender"="sex",
+                            "Chest Pain type"="cp",
+                            "Fasting blood sugar"="fbs","Resting ECG"="restecg",
+                            "Blood disorder(thalassemia)"="thal",
+                            "Execrcise induced Angina"="exang",
+                            "Major vessels colored by flourosopy"="ca"),selected="sex"),
+              sliderInput("slider","Size of Points on Graph",
+                          min=2,max=5,value =3,step=0.5)
+          )
+        ),
+        column(9,
+          plotOutput("scatter")
+        )
+      ),
+      fluidRow(
+        column(3,
+          box(width=NULL,title="Analysis of Categorical vairables for target",
+              selectInput("bar_var","Select the categorical variable",
+                          c("Gender"="sex",
+                            "Chest Pain type"="cp",
+                            "Fasting blood sugar"="fbs",
+                            "Resting ECG"="restecg",
+                            "Blood disorder(thalassemia)"="thal",
+                            "Execrcise induced Angina"="exang",
+                            "Major vessels colored by flourosopy"="ca"),selected="sex")
+          )
+        ),
+        column(9,
+          plotOutput("Bar_taget")
+        )
+      ),
+      fluidRow(
+        column(1
+        ),
+        column(10,align = "center",
+               box(width=NULL,height=45,title="Correlation plots",background="red")
+        ),
+        column(1
+        )
+      ),
+      fluidRow(
+        column(1
+        ),
+        column(10,align = "center",
+               plotOutput("corrplot")
+        ),
+        column(1
+        )
       )
-      
-      
-      )
-    )
-  )
-)
+    ) #tabItem
+    
+   ) #tabItems
+  ) #dashboardBody
+) #dashboardPage
