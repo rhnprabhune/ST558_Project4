@@ -75,6 +75,100 @@ train_df$target_type <- ordered(as.factor(train_df$target_type),
                                 levels = c("No disease","Disease"))
 
 #----------------------------------------------------------------------
+gg_box1 <- ggplot(train_df,aes(age)) +
+  geom_boxplot(fill="steelblue") +
+  labs(x="Age",title="Box plot for Age") + 
+  theme(text=element_text(size=15))
+gg_hist1 <- ggplot(train_df,aes(x=age)) + 
+  geom_histogram(aes(y = ..density..),fill="steelblue") +
+  geom_density() +
+  labs(x="Age",title="Histogram for Age") + 
+  theme(text=element_text(size=15))
+gg_box2 <- ggplot(train_df,aes(trestbps)) +
+  geom_boxplot(fill="steelblue") +
+  labs(x="Resting Blood Pressure",title="Box plot for Resting Blood Pressure (trestbps)") + 
+  theme(text=element_text(size=15))
+gg_hist2 <- ggplot(train_df,aes(x=trestbps)) + 
+  geom_histogram(aes(y = ..density..),fill="steelblue") +
+  geom_density() +
+  labs(x="Resting Blood Pressure",title="Histogram for Resting Blood Pressure (trestbps)") + 
+  theme(text=element_text(size=15))
+gg_box3 <- ggplot(train_df,aes(chol)) +
+  geom_boxplot(fill="steelblue") +
+  labs(x="Cholestrol",title="Box plot for Cholestrol (chol)") + 
+  theme(text=element_text(size=15))
+gg_hist3 <- ggplot(train_df,aes(x=chol)) + 
+  geom_histogram(aes(y = ..density..),fill="steelblue") +
+  geom_density() +
+  labs(x="Cholestrol",title="Histogram for Cholestrol (chol)") + 
+  theme(text=element_text(size=15))
+gg_box4 <- ggplot(train_df,aes(thalach)) +
+  geom_boxplot(fill="steelblue") +
+  labs(x="Max. Heart Rate",title="Box plot for Max. Heart Rate (thalach)") + 
+  theme(text=element_text(size=15))
+gg_hist4 <- ggplot(train_df,aes(x=thalach)) + 
+  geom_histogram(aes(y = ..density..),fill="steelblue") +
+  geom_density() +
+  labs(x="Max. Heart Rate",title="Histogram for Max. Heart Rate (thalach)") + 
+  theme(text=element_text(size=15))
+#----------------------------------------------------------------------
+#---------------------------------------------------------------------
+# Visualizations for categorical variables
+
+#Sex
+cat_gender <- ggplot(train_df,aes(x=gender)) + geom_bar(width=0.5,aes(fill=gender)) + 
+  geom_text(aes(label = ..count..), stat = "count", vjust = -0.5) +
+  scale_fill_discrete(name = "Sex") + 
+  labs(x ="Gender",y="Count",title="Bar plot for Gender") +
+  theme(text=element_text(size=13), plot.title = element_text(hjust = 0.5))
+
+#Chest pain type
+cat_cp <- ggplot(train_df,aes(x=cp_type)) + geom_bar(width=0.5,aes(fill=cp_type)) + 
+  geom_text(aes(label = ..count..), stat = "count", vjust = -0.5) +
+  scale_fill_discrete(name = "Chest Pain Type") + 
+  labs(x ="Chest pain type",y="Count",title="Bar plot for Chest Pain Type") +
+  theme(text=element_text(size=13), plot.title = element_text(hjust = 0.5))
+
+#Fasting blood sugar
+cat_fbs <- ggplot(train_df,aes(x=fbs_type)) + geom_bar(width=0.5,aes(fill=fbs_type)) + 
+  geom_text(aes(label = ..count..), stat = "count", vjust = -0.5) +
+  scale_fill_discrete(name = "Fasting Blood Sugar") + 
+  labs(x ="Fasting Blood Sugar",y="Count",
+       title="Bar plot for Fasting Blood Sugar") +
+  theme(text=element_text(size=13), plot.title = element_text(hjust = 0.5))
+
+#Exercise Induced Angina
+cat_exang <- ggplot(train_df,aes(x=exang_type)) + geom_bar(width=0.5,aes(fill=exang_type)) + 
+  geom_text(aes(label = ..count..), stat = "count", vjust = -0.5) +
+  scale_fill_discrete(name = "Exercise Induced Angina") + 
+  labs(x ="Exercise Induced Angina",y="Count",
+       title="Bar plot for Exercise Induced Angina") +
+  theme(text=element_text(size=13), plot.title = element_text(hjust = 0.5))
+
+#Resting ECG
+cat_restecg <- ggplot(train_df,aes(x=restecg_type)) + geom_bar(width=0.5,aes(fill=restecg_type)) + 
+  geom_text(aes(label = ..count..), stat = "count", vjust = -0.5) +
+  scale_fill_discrete(name = "Resting ECG") + 
+  labs(x ="Resting ECG",y="Count",title="Bar plot for Resting ECG") +
+  theme(text=element_text(size=13), plot.title = element_text(hjust = 0.5))
+
+#Colored blood vessels
+cat_ca <- ggplot(train_df,aes(x=ca)) + geom_bar(width=0.5,aes(fill=ca)) + 
+  geom_text(aes(label = ..count..), stat = "count", vjust = -0.5) +
+  scale_fill_discrete(name = "Number of major vessels colored by flourosopy") + 
+  labs(x ="Number of major vessels colored by flourosopy",
+       y="Count",
+       title="Bar plot for Number of major vessels colored by flourosopy") +
+  theme(text=element_text(size=13), plot.title = element_text(hjust = 0.5))
+
+#Thal
+cat_thal <- ggplot(train_df,aes(x=thal_type)) + geom_bar(width=0.5,aes(fill=thal_type)) + 
+  geom_text(aes(label = ..count..), stat = "count", vjust = -0.5) +
+  scale_fill_discrete(name = "Blood disorder(thalassemia)") + 
+  labs(x ="Blood disorder(thalassemia)",y="Count",
+       title="Bar plot for Blood disorder(thalassemia)") +
+  theme(text=element_text(size=13), plot.title = element_text(hjust = 0.5))
+#--------------------------------------------------------------------------
 
 function(input, output, session) { 
   
@@ -102,8 +196,62 @@ function(input, output, session) {
     tab <- as.data.frame.matrix(table(train_df[input_eda1_type][[1]],train_df[input_eda2_type][[1]]))
   })
   
+  #3. Box or histograms
+  output$bh_plot1 <- renderPlot({
+    if (input$box_or_hist=="box_only" | input$box_or_hist =="both_box_hist"){
+      gg_box1
+    }
+    else if (input$box_or_hist=="hist_only"){
+      gg_hist1
+    }
+  })
   
-
+  output$bh_plot2 <- renderPlot({
+    if (input$box_or_hist=="box_only"){
+      gg_box2
+    }
+    else if (input$box_or_hist=="hist_only"){
+      gg_hist2
+    }
+    else if (input$box_or_hist=="both_box_hist"){
+      gg_hist1
+    }
+  })
   
+  output$bh_plot3 <- renderPlot({
+    if (input$box_or_hist=="box_only"){
+      gg_box3
+    }
+    else if (input$box_or_hist=="hist_only"){
+      gg_hist3
+    }
+    else if (input$box_or_hist=="both_box_hist"){
+      gg_box2
+    }
+  })
   
+  output$bh_plot4 <- renderPlot({
+    if (input$box_or_hist=="box_only"){
+      gg_box4
+    }
+    else if (input$box_or_hist=="hist_only"){
+      gg_hist4
+    }
+    else if (input$box_or_hist=="both_box_hist"){
+      gg_hist2
+    }
+  })
+  output$bh_plot5 <- renderPlot({gg_box3})
+  output$bh_plot6 <- renderPlot({gg_hist3})
+  output$bh_plot7 <- renderPlot({gg_box4})
+  output$bh_plot8 <- renderPlot({gg_hist4})
+  
+  #3. Bar plots
+  output$cat_gender <- renderPlot({cat_gender})
+  output$cat_cp <- renderPlot({cat_cp})
+  output$cat_restecg <- renderPlot({cat_restecg})
+  output$cat_ca <- renderPlot({cat_ca})
+  output$cat_thal <- renderPlot({cat_thal})
+  output$cat_fbs <- renderPlot({cat_fbs})
+  output$cat_exang <- renderPlot({cat_exang})
 }
