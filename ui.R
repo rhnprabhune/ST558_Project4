@@ -82,6 +82,32 @@ dashboardPage(skin = "red",
      ),  #Tab item
      tabItem(tabName = "data_exp",
       fluidRow(
+        column(1
+        ),
+        column(10,align = "center",
+               box(width=NULL,height=45,title="Train-Test Split",background="red")
+        ),
+        column(1
+        )
+      ),
+      fluidRow(
+        column(1
+        ),
+        column(4,
+          box(width=NULL,status="danger",
+              sliderInput("split_number","Select the proportion of training data",
+                          min=0.6,max=0.9,value=0.8,step=0.05))
+        ),
+        column(6,
+               box(width =NULL,status = "danger",
+                   h4("We first split our data into train and test set and perform Exploratory
+                 Data Analysis (EDA) on train data."),
+                   actionButton("split","Click here to split Data"))
+        ),
+        column(1
+        )
+      ),
+      fluidRow(
        column(3,
         box(width=NULL,height=405,title="Numerical Summaries of variables",
             checkboxGroupInput("num_summary",
@@ -94,7 +120,7 @@ dashboardPage(skin = "red",
        ),
        column(9,
         box(width=NULL,title="Numerical summaries",
-            tableOutput("numerical_summaries")
+            dataTableOutput("numerical_summaries")
         )
        )
       ),
