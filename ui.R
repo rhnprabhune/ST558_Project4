@@ -74,7 +74,8 @@ dashboardPage(skin = "red",
                Classification tree and a Random Forest model. Here you can find the infomartion on each of these models,
                tune the hyperparameters of the model, check the fit statistics and perform predictive analysis."),
             h4("4. Data:"),
-            h4("Here you can check out the data used for this application, subset the dataset and obtain a .csv file."),
+            h4("Here you can check out the data used for this application, subset the dataset and 
+               obtain a .csv file.")
           )
         )
       )
@@ -311,8 +312,77 @@ dashboardPage(skin = "red",
       )
     ), #tabItem
     tabItem(tabName = "model",
-    ) #tabItem
-    
+      tabsetPanel(
+        tabPanel("Modeling Info",
+          fluidRow(
+            column(12,
+              box(width=NULL,title="Generalized Linear Model: Binary Logistic Regression",
+                  status="danger",solidHeader = TRUE,
+                h4("This type of statistical model (also known as logit model) is
+                often used for classification.Logistic regression estimates the 
+                probability of an event occurring based on a given dataset of 
+                   independent variables. 
+                   The dependent variable is bounded between 0 and 1."),
+                h4("In logistic regression, a logit transformation is applied on 
+                the odds—that is, the probability of success divided by the 
+                probability of failure. This is also commonly known as the log 
+                odds, or the natural logarithm of odds, and this logistic function
+                   is represented by the following formulas:"),
+                withMathJax(),
+                helpText('$$logit(p) = log(\\frac{p}{1-p}) = \\beta_0 + \\beta_1 \\cdot x_1 + 
+                         \\beta_2 \\cdot x_2 + ... + \\beta_k \\cdot x_k$$'),
+                h5("Here the ",tags$b("logit"),
+                " function is called the ",
+                tags$b("link"),
+                " function and ",
+                tags$b("p = average number of successes at a given x")),
+                h4("This method tests different values of beta through multiple 
+                   iterations to optimize for the best fit of log odds. 
+                   For binary classification, a probability less than .5 will 
+                   predict 0 while a probability greater than 0 will predict 1"),
+                h4(tags$b("Advantages:"),
+                   tags$br(),
+                   "Easy to implement, interpret, and very efficient to train.",
+                   tags$br(),
+                   "Good accuracy for many simple data sets and it performs well when 
+                   the dataset is linearly separable.",
+                   tags$br(),
+                   "It can easily extend to multiple classes(multinomial regression) and 
+                   a natural probabilistic view of class predictions."),
+                h4(tags$b("Drawbacks:"),
+                   tags$br(),
+                   "If the number of observations is lesser than the number 
+                   of features, it may lead to overfitting",
+                   tags$br(),
+                   "Non-linear problems can’t be solved with logistic regression 
+                   because it has a linear decision surface",
+                   tags$br(),
+                   "It is tough to obtain complex relationships using logistic 
+                   regression")
+              )
+            )
+          ),
+          fluidRow(
+            column(12,
+              box(width=NULL,title="Classification Tree",
+                  status="danger",solidHeader = TRUE
+              )
+            )
+          ),
+          fluidRow(
+            column(12,
+              box(width=NULL,title="Random Forest Model",
+                  status="danger",solidHeader = TRUE
+              )
+            )
+          )
+        ),
+        tabPanel("Model Fitting"),
+        tabPanel("Prediction")
+      )
+    ), #tabItem
+    tabItem(tabName = "data"
+    )
    ) #tabItems
   ) #dashboardBody
 ) #dashboardPage
