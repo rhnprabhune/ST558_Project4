@@ -94,7 +94,7 @@ dashboardPage(skin = "red",
        ),
        column(9,
         box(width=NULL,title="Numerical summaries",
-            dataTableOutput("numerical_summaries")
+            tableOutput("numerical_summaries")
         )
        )
       ),

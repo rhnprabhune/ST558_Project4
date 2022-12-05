@@ -1,6 +1,7 @@
 library(tidyverse)
 library(corrplot)
 library(caret)
+library(kableExtra)
 
 data <- read_csv("data/heart.csv")
 data$ca <- ordered(as.factor(data$ca),

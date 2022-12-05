@@ -174,11 +174,15 @@ cat_thal <- ggplot(train_df,aes(x=thal_type)) + geom_bar(width=0.5,aes(fill=thal
 function(input, output, session) { 
   
   #1. Numerical Summaries data table
-  output$numerical_summaries <- DT::renderDataTable({
+  output$numerical_summaries <- renderTable({
     variables_selected = input$num_summary
     df_summary <- train_df %>%
       select(all_of(variables_selected))
     predictor_table <- apply(df_summary, MARGIN = 2,FUN = summary, na.rm = TRUE)
+    df <- as_tibble((predictor_table))
+    df$stats <- rownames(predictor_table) 
+    df <- df %>% select(stats,everything())
+    df
   })
   
   #2. Contingency tables
