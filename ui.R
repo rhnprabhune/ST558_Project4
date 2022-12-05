@@ -17,31 +17,68 @@ dashboardPage(skin = "red",
      tabItem(tabName = "about",
       fluidRow(
         column(12,align="center",div(style="margin:0%"),
-            imageOutput("img")
+            imageOutput("img"),
+            h4("Created by:",a(href="https://www.linkedin.com/in/rohan-prabhune-57b083174/",
+                               "Rohan Prabhune",style="font-size:20px;"))
         )
       ),
       fluidRow(
         column(3),
         column(6,align = "center",
-               box(width=NULL,height=45,title="About this app",background="red")
+           box(width=NULL,height=45,background="red",
+              title="About this app"
+           )
         ),
         column(3)
       ),
       fluidRow(
         column(4,
-          box(width=NULL,title="Purpose of the App",
+          box(width=NULL,title="Purpose of the App",status="danger",solidHeader = TRUE,
+            h4("This application was created as a part of course project for ST 558 in Fall 2022.
+               The goal of this project is to create a shiny app that can be used to explore data and model it."),
+            h4("Shiny is an R package that makes it easy to build interactive web apps straight from R.
+               You can host standalone apps on a webpage or embed them in R Markdown documents or build dashboards.
+               This is one such application where I have used shiny to create dashboard to performing predictive
+               modelling on a dataset taken from ",a(href="https://www.kaggle.com/","Kaggle",style="font-size:20px;")),
+            h4("This application is created specifically using ",
+               a(href="https://rstudio.github.io/shinydashboard/index.html","shinydashboard",style="font-size:20px;"),
+               "which allows you to customize the header, sidebar and body of the app.")
           )
         ),
         column(4,
-          box(width=NULL,title="Data",
+          box(width=NULL,title="Data",status="danger",solidHeader = TRUE,
+            h4("This Heart Disease Dataset dates from 1988 and consists of four databases: 
+               Cleveland, Hungary, Switzerland, and Long Beach V combined. 
+               The original dataset contained 76 attributes, including the predicted attribute, 
+               but all published experiments refer to using a subset of 14 of them. So for this application I 
+               have considered these 14 attributes only. 
+               The \"target\" field refers to the presence of heart disease in the patient. 
+               It is integer valued 0 = no disease and 1 = disease."),
+            h4("The dataset can be found ",a(href="https://www.kaggle.com/datasets/johnsmith88/heart-disease-dataset",
+                                             "here",style="font-size:18px;")),
+            h4("You can find more information on the 14 attributes used in the dataset and the relevant research papers
+               that cite this data set ",
+               a(href="https://archive.ics.uci.edu/ml/datasets/heart+disease","here",style="font-size:18px;"))
           )
         ),
         column(4,
-          box(width=NULL,title="Tab Description",
+          box(width=NULL,title="Navigating the application",status="danger",solidHeader = TRUE,
+            h4("The application consists of 4 tabs in the sidebar"),
+            h4("1. About: (You are here!)"),
+            h4("2. Data Exploration:"),
+            h4("This page allows you to do Exploratory Data Analysis on the dataset
+               which includes Quantitaive data graphs, Categorical data graphs,
+                Graphical analysis with target variable and Correlation plots."),
+            h4("3. Modeling:"),
+            h4("This tab allows the user to fit 3 classificaiton models to the data: Generalized linear model,
+               Classification tree and a Random Forest model. Here you can find the infomartion on each of these models,
+               tune the hyperparameters of the model, check the fit statistics and perform predictive analysis."),
+            h4("4. Data:"),
+            h4("Here you can check out the data used for this application, subset the dataset and obtain a .csv file."),
           )
         )
       )
-     ),
+     ),  #Tab item
      tabItem(tabName = "data_exp",
       fluidRow(
        column(3,
@@ -119,7 +156,7 @@ dashboardPage(skin = "red",
             box(width=NULL,
               plotOutput("bh_plot7")
             )
-          )
+          ) 
         ),
         column(5,
           box(width=NULL,
@@ -247,7 +284,7 @@ dashboardPage(skin = "red",
                             "Resting ECG"="restecg",
                             "Blood disorder(thalassemia)"="thal",
                             "Execrcise induced Angina"="exang",
-                            "Major vessels colored by flourosopy"="ca"),selected="sex")
+                            "Major vessels colored by flourosopy"="ca"),selected="cp")
           )
         ),
         column(9,
@@ -272,6 +309,8 @@ dashboardPage(skin = "red",
         column(1
         )
       )
+    ), #tabItem
+    tabItem(tabName = "model",
     ) #tabItem
     
    ) #tabItems
