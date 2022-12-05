@@ -317,5 +317,21 @@ function(input, output, session) {
     list(src = filename,
          alt = "ECG image",width=1000,height=300)
   }, deleteFile = FALSE)
+  
+  #8. Classification Tree - Image
+  output$tree <- renderImage({
+    filename <- normalizePath(file.path('./images',"tree.png"))
+    # Return a list containing the filename and alt text
+    list(src = filename,
+         alt = "Tree image",width=500,height=300)
+  }, deleteFile = FALSE)
+  
+  #9. Classification Tree - Image
+  output$rf <- renderImage({
+    filename <- normalizePath(file.path('./images',"rf.png"))
+    # Return a list containing the filename and alt text
+    list(src = filename,
+         alt = "RF image",width=400,height=300)
+  }, deleteFile = FALSE)
 
 }

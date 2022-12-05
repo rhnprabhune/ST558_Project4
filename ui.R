@@ -1,5 +1,6 @@
 library(shiny)
 library(shinydashboard)
+library(DT)
 
 dashboardPage(skin = "red",
   dashboardHeader(title = "ST 558- Project 4"),
@@ -17,7 +18,9 @@ dashboardPage(skin = "red",
      tabItem(tabName = "about",
       fluidRow(
         column(12,align="center",div(style="margin:0%"),
+            HTML("<div style='height: 270px;'>"),
             imageOutput("img"),
+            HTML("</div>"),
             h4("Created by:",a(href="https://www.linkedin.com/in/rohan-prabhune-57b083174/",
                                "Rohan Prabhune",style="font-size:20px;"))
         )
@@ -391,6 +394,80 @@ dashboardPage(skin = "red",
           fluidRow(
             column(12,
               box(width=NULL,title="Classification Tree",
+                  status="danger",solidHeader = TRUE,
+                  h4("A classification tree is an algorithm where the target 
+                  variable is fixed or categorical. The algorithm is then used to
+                  identify the “class” within which a target variable would most
+                   likely fall.A Classification tree is built through a process 
+                   known as binary recursive partitioning. This is an iterative 
+                   process of splitting the data into partitions, and then 
+                     splitting it up further on each of the branches."),
+                  HTML("<div style='height: 300px;'>"),
+                  imageOutput("tree"),
+                  HTML("</div>"),
+                  h4(tags$b("Advantages:"),
+                     tags$br(),
+                     "Simple to understand and easy to interpret output.",
+                     tags$br(),
+                     "Predictors don't need to be scaled.",
+                     tags$br(),
+                     "Built in variable selection."),
+                  h4(tags$b("Drawbacks:"),
+                     tags$br(),
+                     "Small changes in data can vastly change tree.",
+                     tags$br(),
+                     "Greedy algorithm necessary (no optimal algorithm).",
+                     tags$br(),
+                     "Need to prune (usually).")
+                  
+              )
+            )
+          ),
+          fluidRow(
+            column(12,
+              box(width=NULL,title="Random Forest Model",
+                  status="danger",solidHeader = TRUE,
+                  h4("Random forest, like its name implies, consists of a large 
+                     number of individual decision trees (in this case - 
+                     classification tree) that operate as an ensemble. Each 
+                     individual tree in the random forest spits out a class 
+                     prediction and the class with the most votes 
+                     becomes our model’s prediction (see figure below)."),
+                  HTML("<div style='height: 300px;'>"),
+                  imageOutput("rf"),
+                  HTML("</div>"),
+                  h4(tags$b("Advantages:"),
+                     tags$br(),
+                     "It reduces overfitting in decision trees and helps to improve the accuracy.",
+                     tags$br(),
+                     "It automates missing values present in the data.",
+                     tags$br(),
+                     "Normalising of data is not required as it uses a rule-based approach."),
+                  h4(tags$b("Drawbacks:"),
+                     tags$br(),
+                     "It requires much computational power as well as resources 
+                     as it builds numerous trees to combine their outputs.",
+                     tags$br(),
+                     "It also requires much time for training as it combines 
+                     a lot of decision trees to determine the class.",
+                     tags$br(),
+                     "Due to the ensemble of decision trees, it also 
+                     suffers interpretability.")
+              )
+            )
+          )
+        ),
+        tabPanel("Model Fitting",
+          fluidRow(
+            column(12,
+              box(width=NULL,title="Generalized Linear Model: Binary Logistic Regression",
+              status="danger",solidHeader = TRUE
+              )
+            )  
+          ),       
+          fluidRow(
+            column(12,
+              box(width=NULL,title="Classification Tree",
                   status="danger",solidHeader = TRUE
               )
             )
@@ -403,8 +480,8 @@ dashboardPage(skin = "red",
             )
           )
         ),
-        tabPanel("Model Fitting"),
-        tabPanel("Prediction")
+        tabPanel("Prediction"
+        )
       )
     ), #tabItem
     tabItem(tabName = "data"
