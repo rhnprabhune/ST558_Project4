@@ -117,7 +117,7 @@ dashboardPage(skin = "red",
                                "Select the variables for which you want the numerical summaries",
                                 c("Age"="age","Resting Blood Pressure(trestbps)"="trestbps",
                                   "Cholestrol(chol)"="chol","Max. heart rate(thalach)"="thalach",
-                                  "Old peak"="oldpeak"),
+                                  "ST depression induced"="oldpeak"),
                                selected=c("age","trestbps","chol","thalach","oldpeak"))
         )
        ),
@@ -284,11 +284,11 @@ dashboardPage(skin = "red",
               selectInput("scatter_var1","Select the numerical variable on x-axis",
                           c("Age"="age","Resting Blood Pressure"="trestbps",
                             "Cholestrol"="chol","Max. Heart Rate"="thalach",
-                            "Old peak"="oldpeak"),selected="age"),
+                            "ST depression induced"="oldpeak"),selected="age"),
               selectInput("scatter_var2","Select the numerical variable on y-axis",
                           c("Age"="age","Resting Blood Pressure"="trestbps",
                             "Cholestrol"="chol","Max. Heart Rate"="thalach",
-                            "Old peak"="oldpeak"),selected="trestbps"),
+                            "ST depression induced"="oldpeak"),selected="trestbps"),
               selectInput("scatter_var3","Select by categorical variable for color",
                           c("Gender"="sex",
                             "Chest Pain type"="cp",
@@ -459,24 +459,116 @@ dashboardPage(skin = "red",
         ),
         tabPanel("Model Fitting",
           fluidRow(
-            column(12,
+            column(4,
               box(width=NULL,title="Generalized Linear Model: Binary Logistic Regression",
-              status="danger",solidHeader = TRUE
+              status="danger",solidHeader = TRUE,
+              checkboxGroupInput("train_var1","Select predictor variables:",
+                                 c("Age (age)"="age","Sex (sex)"="sex",
+                                   "Chest pain type (cp)"="cp",
+                                   "Resting blood pressure (trestbps)"="trestbps",
+                                   "Cholestrol (chol)"="chol",
+                                   "Fasting blood sugar (fbs)"="fbs",
+                                   "Resting ECG (restecg)"="restecg",
+                                   "Max. heart rate (thalach)"="thalach",
+                                   "Exercise induced angina (exang)"="exang",
+                                   "ST depression induced (oldpeak)"="oldpeak",
+                                   "Slope (slope)"="slope",
+                                   "Number of major vessels colored by flourosopy (ca)"="ca",
+                                   "Blood disorder (thal)"="thal"),
+                                 selected=c("age","sex","chol","fbs","thalach"))
               )
-            )  
-          ),       
+            ),
+            column(4,
+                   box(width=NULL,title="Classification Tree",
+                       status="danger",solidHeader = TRUE,
+                       checkboxGroupInput("train_var2","Select predictor variables:",
+                                          c("Age (age)"="age","Sex (sex)"="sex",
+                                            "Chest pain type (cp)"="cp",
+                                            "Resting blood pressure (trestbps)"="trestbps",
+                                            "Cholestrol (chol)"="chol",
+                                            "Fasting blood sugar (fbs)"="fbs",
+                                            "Resting ECG (restecg)"="restecg",
+                                            "Max. heart rate (thalach)"="thalach",
+                                            "Exercise induced angina (exang)"="exang",
+                                            "ST depression induced (oldpeak)"="oldpeak",
+                                            "Slope (slope)"="slope",
+                                            "Number of major vessels colored by flourosopy (ca)"="ca",
+                                            "Blood disorder (thal)"="thal"),
+                                          selected=c("age","sex","chol","fbs","thalach"))
+                   )
+            ),
+            column(4,
+                   box(width=NULL,title="Random Forest Model",
+                       status="danger",solidHeader = TRUE,
+                       checkboxGroupInput("train_var3","Select predictor variables:",
+                                          c("Age (age)"="age","Sex (sex)"="sex",
+                                            "Chest pain type (cp)"="cp",
+                                            "Resting blood pressure (trestbps)"="trestbps",
+                                            "Cholestrol (chol)"="chol",
+                                            "Fasting blood sugar (fbs)"="fbs",
+                                            "Resting ECG (restecg)"="restecg",
+                                            "Max. heart rate (thalach)"="thalach",
+                                            "Exercise induced angina (exang)"="exang",
+                                            "ST depression induced (oldpeak)"="oldpeak",
+                                            "Slope (slope)"="slope",
+                                            "Number of major vessels colored by flourosopy (ca)"="ca",
+                                            "Blood disorder (thal)"="thal"),
+                                          selected=c("age","sex","chol","fbs","thalach"))
+                   )
+            )
+          ),
           fluidRow(
-            column(12,
-              box(width=NULL,title="Classification Tree",
-                  status="danger",solidHeader = TRUE
+            column(2),
+            column(8,align = "center",
+                   box(width=NULL,
+                       h4("For each of the models select the predictor variables 
+                          and other model settings above and use the button below to 
+                          train all the models."),
+                       actionButton("train","TRAIN"))
+            ),
+            column(2)
+          ),
+          fluidRow(
+            column(4,
+              box(width=NULL,status="danger",
+                  
+              )
+            ),
+            column(4,
+              box(width=NULL,status="danger",
+                       
+              )
+            ),
+            column(4,
+              box(width=NULL,status="danger",
+                       
               )
             )
           ),
           fluidRow(
-            column(12,
-              box(width=NULL,title="Random Forest Model",
-                  status="danger",solidHeader = TRUE
-              )
+            column(2),
+            column(8,align = "center",
+                   box(width=NULL,
+                       h4("For each of the models, predict on the test set"),
+                       actionButton("predict_test_df","PREDICT"))
+            ),
+            column(2)
+          ),
+          fluidRow(
+            column(4,
+                   box(width=NULL,status="danger",
+                       
+                   )
+            ),
+            column(4,
+                   box(width=NULL,status="danger",
+                       
+                   )
+            ),
+            column(4,
+                   box(width=NULL,status="danger",
+                       
+                   )
             )
           )
         ),

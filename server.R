@@ -8,6 +8,14 @@ library(caret)
 data <- read_csv("data/heart.csv")
 data$ca <- ordered(as.factor(data$ca),
                    levels = c("0","1","2","3"))
+data$sex <- as_factor(data$sex)
+data$cp <- as_factor(data$cp)
+data$fbs <- as_factor(data$fbs)
+data$restecg <- as_factor(data$restecg)
+data$exang <- as_factor(data$exang)
+data$slope <- as_factor(data$slope)
+data$thal <- as_factor(data$thal)
+data$target <- as_factor(data$target)
 #Tibble for printing ease
 og <- c("sex","cp","fbs","restecg","thal","exang","ca","age","trestbps","chol",
         "thalach","oldpeak")
@@ -333,5 +341,19 @@ function(input, output, session) {
     list(src = filename,
          alt = "RF image",width=400,height=300)
   }, deleteFile = FALSE)
+  
+  
+  #10. TRAINING
+  model_fits <- eventReactive(input$train, {
+    #Logistic Regression
+    
+    fit_lg <- train(target ~ .,
+                    data = train_df,
+                    method = "glm",
+                    preProcess = c("center", "scale"),
+                    trControl = trainControl(method = "cv", number = 10),
+                    family="binomial")
+    
+  })
 
 }
