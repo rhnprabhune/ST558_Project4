@@ -342,7 +342,7 @@ function(input, output, session) {
                                fit_tree=NULL,fit_rf=NULL,text_out=NULL)
   
   observeEvent(input$model_train,{
-    if (input$model_train) {
+    #if (input$model_train) {
       train_df <- set_up_vals()$train_df %>%
         select(c(-gender,-cp_type,-fbs_type,-restecg_type,-thal_type,-exang_type,-target_type))
       model_fits$train_df <- train_df %>% drop_na()
@@ -379,10 +379,10 @@ function(input, output, session) {
                      tuneGrid = data.frame(mtry = input$mtry)) 
       print("**************************************************")
       model_fits$text_out <- "...Training Complete..."
-    }
-    if (input$model_train==0) {
-      model_fits$text_out <- ""
-    }
+    #}
+    #if (input$model_train==0) {
+    #  model_fits$text_out <- ""
+    #}
   })
   
   output$model_fits <- renderText({
