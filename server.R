@@ -565,7 +565,7 @@ function(input, output, session) {
     end <- as.numeric(input$offset) + as.numeric(input$count)
     data_out <- data %>%
       select(all_of(input$get_data)) %>%
-      slice(start:end)
+      slice(start+1:end)
     data_out
   })
   
