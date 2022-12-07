@@ -531,7 +531,7 @@ dashboardPage(skin = "red",
                        h4("For each of the models select the predictor variables 
                           and other model settings above.Use the button below to 
                           train all the models and perform predictions on test data."),
-                       actionButton(inputId="model_train",label="Train models and Predict"),
+                       actionButton(inputId="model_train",label="Train models and Predict")
                        #textOutput("model_fits")
                     )
             ),
