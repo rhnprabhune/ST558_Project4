@@ -30,7 +30,7 @@ confusionMatrix(data = test_pred_lg, reference = test_df$target)
 #Classification Tree
 input_max_depth = 6 #2 to 10
 fit_tree = train(target ~ ., 
-                  data=train_df, 
+                  data=select(train_df,-ca), 
                   method="rpart2",
                   preProcess = c("center", "scale"),
                   trControl = trainControl(method = "cv",number = 10),

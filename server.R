@@ -183,7 +183,7 @@ function(input, output, session) {
          cat_restecg=cat_restecg,cat_ca=cat_ca,cat_thal=cat_thal)
     
   },ignoreNULL = FALSE)
-  
+  #-----------------------------------------------------------------------------
   
   #1. Numerical Summaries data table
   output$numerical_summaries <- DT::renderDataTable({
@@ -198,7 +198,7 @@ function(input, output, session) {
     #df <- df %>% select(stats,everything())
     #df
   })
-  
+  #-----------------------------------------------------------------------------
   #2. Contingency tables
   output$contingency_table <- DT::renderDataTable({
     input_eda1 = input$cont_var1
@@ -212,7 +212,7 @@ function(input, output, session) {
     tab <- as.data.frame.matrix(table(set_up_vals()$train_df[input_eda1_type][[1]],
                                       set_up_vals()$train_df[input_eda2_type][[1]]))
   })
-  
+  #-----------------------------------------------------------------------------
   #3. Box or histograms
   output$bh_plot1 <- renderPlot({
     if (input$box_or_hist=="box_only" | input$box_or_hist =="both_box_hist"){
@@ -262,7 +262,7 @@ function(input, output, session) {
   output$bh_plot6 <- renderPlot({set_up_vals()$gg_hist3})
   output$bh_plot7 <- renderPlot({set_up_vals()$gg_box4})
   output$bh_plot8 <- renderPlot({set_up_vals()$gg_hist4})
-  
+  #-----------------------------------------------------------------------------
   #3. Bar plots
   output$cat_gender <- renderPlot({set_up_vals()$cat_gender})
   output$cat_cp <- renderPlot({set_up_vals()$cat_cp})
@@ -271,7 +271,7 @@ function(input, output, session) {
   output$cat_thal <- renderPlot({set_up_vals()$cat_thal})
   output$cat_fbs <- renderPlot({set_up_vals()$cat_fbs})
   output$cat_exang <- renderPlot({set_up_vals()$cat_exang})
-  
+  #-----------------------------------------------------------------------------
   #4. Scatter plot
   #EDA with Target variable (Numerical variables)
   
@@ -292,7 +292,7 @@ function(input, output, session) {
                         input_target_num_str1)) +
       theme(text=element_text(size=15))
   })
-  
+  #-----------------------------------------------------------------------------
   #5. EDA with Target variable (Categorical variables)
   output$Bar_taget <- renderPlot({
     input_target_cat = input$bar_var
@@ -309,7 +309,7 @@ function(input, output, session) {
       geom_text(aes(label = ..count..), stat = "count", vjust = -0.5,
                 position = position_dodge(width = 0.5))
   })
-  
+  #-----------------------------------------------------------------------------
   #6. Correlation plot
   output$corrplot <- renderPlot({
     corr_data1 <- set_up_vals()$train_df %>% select(age,trestbps,chol,thalach,oldpeak)
@@ -317,7 +317,7 @@ function(input, output, session) {
     corrplot(corr1,diag=FALSE)
     
   })
-  
+  #-----------------------------------------------------------------------------
   #7. About - Image
   output$img <- renderImage({
     filename <- normalizePath(file.path('./images',"ecg2.png"))
@@ -336,7 +336,7 @@ function(input, output, session) {
     list(src = filename,alt = "RF image",width=400,height=300)
   }, deleteFile = FALSE)
   
-  
+  #-----------------------------------------------------------------------------
   #10. TRAINING
   model_fits <- reactiveValues(test_df=NULL,train_df=NULL,fit_lg=NULL,
                                fit_tree=NULL,fit_rf=NULL,text_out=NULL)
@@ -388,9 +388,9 @@ function(input, output, session) {
   output$model_fits <- renderText({
     model_fits$text_out
   })
-  
+  #-----------------------------------------------------------------------------  
   #11. Training Stats
-  output$train_stats_lg <- renderText({
+  output$train_stats_lg <- renderPrint({
     if (is.null(model_fits$train_df)){
       train_accuracy_lg <- "Model not trained yet"
     } else {
@@ -401,9 +401,18 @@ function(input, output, session) {
       train_accuracy_lg  
     }
   })
+  output$train_stats_lg_summary <- renderPrint({
+      if (is.null(model_fits$fit_lg)){
+        train_summary_lg <- "Model not trained yet"
+      } else {
+        train_summary_lg <- summary(model_fits$fit_lg)  
+      }
+    train_summary_lg
+    })
   
   
-  output$train_stats_tree <- renderText({
+  
+  output$train_stats_tree <- renderPrint({
     if (is.null(model_fits$train_df)){
       train_accuracy_tree <- "Model not trained yet"
     } else {
@@ -414,8 +423,18 @@ function(input, output, session) {
       train_accuracy_tree  
     }
   })
+  output$train_stats_tree_summary <- renderPrint({
+    if (is.null(model_fits$fit_tree)){
+      train_summary_tree <- "Model not trained yet"
+    } else {
+      train_summary_tree <- model_fits$fit_tree
+    }
+    train_summary_tree
+  })
   
-  output$train_stats_rf <- renderText({
+  
+  
+  output$train_stats_rf <- renderPrint({
     if (is.null(model_fits$train_df)){
       train_accuracy_rf <- "Model not trained yet"
     } else {
@@ -426,9 +445,18 @@ function(input, output, session) {
       train_accuracy_rf  
     }
   })
+  output$train_stats_rf_summary <- renderPrint({
+    if (is.null(model_fits$fit_rf)){
+      train_summary_rf <- "Model not trained yet"
+    } else {
+      train_summary_rf <- model_fits$fit_rf
+    }
+    train_summary_rf
+  })
   
+  #-----------------------------------------------------------------------------
   #12.Testing Stats
-  output$test_stats_lg <- renderText({
+  output$test_stats_lg <- renderPrint({
     if (is.null(model_fits$test_df)){
       test_accuracy_lg <- "Model not trained yet"
     } else {
@@ -439,9 +467,20 @@ function(input, output, session) {
       test_accuracy_lg  
     }
   })
+  output$test_cf_lg <- renderPrint({
+    if (is.null(model_fits$test_df)){
+      test_cf_lg <- "Model not trained yet"
+    } else {
+      test_df <- model_fits$test_df
+      test_pred_lg <- predict(model_fits$fit_lg,newdata = select(test_df,-target))
+      test_cf_lg <- confusionMatrix(data = test_pred_lg, reference = test_df$target)
+    }
+    test_cf_lg
+  })
   
   
-  output$test_stats_tree <- renderText({
+  
+  output$test_stats_tree <- renderPrint({
     if (is.null(model_fits$test_df)){
       test_accuracy_tree <- "Model not trained yet"
     } else {
@@ -452,8 +491,20 @@ function(input, output, session) {
       test_accuracy_tree  
     }
   })
+  output$test_cf_tree <- renderPrint({
+    if (is.null(model_fits$test_df)){
+      test_cf_tree <- "Model not trained yet"
+    } else {
+      test_df <- model_fits$test_df
+      test_pred_tree <- predict(model_fits$fit_tree,newdata = select(test_df,-target))
+      test_cf_tree <- confusionMatrix(data = test_pred_tree, reference = test_df$target)
+    }
+    test_cf_tree
+  })
   
-  output$test_stats_rf <- renderText({
+  
+  
+  output$test_stats_rf <- renderPrint({
     if (is.null(model_fits$test_df)){
       test_accuracy_rf <- "Model not trained yet"
     } else {
@@ -463,6 +514,16 @@ function(input, output, session) {
                                                       /nrow(test_df))*100,2)),"%")
       test_accuracy_rf  
     }
+  })
+  output$test_cf_rf <- renderPrint({
+    if (is.null(model_fits$test_df)){
+      test_cf_rf <- "Model not trained yet"
+    } else {
+      test_df <- model_fits$test_df
+      test_pred_rf <- predict(model_fits$fit_rf,newdata = select(test_df,-target))
+      test_cf_rf <- confusionMatrix(data = test_pred_rf, reference = test_df$target)
+    }
+    test_cf_rf
   })
   
 }

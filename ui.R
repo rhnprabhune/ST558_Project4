@@ -539,43 +539,55 @@ dashboardPage(skin = "red",
             column(4,
               box(width=NULL,title="Generalized Linear Model: Binary Logistic Regression",
                   status="danger",solidHeader = TRUE,
-                  h5("Training accuracy is:"),
-                  textOutput("train_stats_lg")
+                  h5(tags$b("Training accuracy:")),
+                  verbatimTextOutput("train_stats_lg"),
+                  h5(tags$b("Summary:")),
+                  verbatimTextOutput("train_stats_lg_summary")
               )
             ),
             column(4,
               box(width=NULL,title="Classification Tree",
                   status="danger",solidHeader = TRUE,
-                  h5("Training accuracy is:"),
-                  textOutput("train_stats_tree")
+                  h5(tags$b("Training accuracy:")),
+                  verbatimTextOutput("train_stats_tree"),
+                  h5(tags$b("Summary:")),
+                  verbatimTextOutput("train_stats_tree_summary")
                        
               )
             ),
             column(4,
               box(width=NULL,title="Random Forest Model",
                   status="danger",solidHeader = TRUE,
-                  h5("Training accuracy is:"),
-                  textOutput("train_stats_rf")
+                  h5(tags$b("Training accuracy:")),
+                  verbatimTextOutput("train_stats_rf"),
+                  h5(tags$b("Summary:")),
+                  verbatimTextOutput("train_stats_rf_summary")
               )
             )
           ),
           fluidRow(
             column(4,
                    box(width=NULL,status="danger",
-                       h5("Testing accuracy is:"),
-                       textOutput("test_stats_lg")
+                       h5(tags$b("Testing accuracy:")),
+                       verbatimTextOutput("test_stats_lg"),
+                       h5(tags$b("Confusion Matrix:")),
+                       verbatimTextOutput("test_cf_lg")
                    )
             ),
             column(4,
                    box(width=NULL,status="danger",
-                       h5("Testing accuracy is:"),
-                       textOutput("test_stats_tree")
+                       h5(tags$b("Testing accuracy:")),
+                       verbatimTextOutput("test_stats_tree"),
+                       h5(tags$b("Confusion Matrix:")),
+                       verbatimTextOutput("test_cf_tree")
                    )
             ),
             column(4,
                    box(width=NULL,status="danger",
-                       h5("Testing accuracy is:"),
-                       textOutput("test_stats_rf")
+                       h5(tags$b("Testing accuracy:")),
+                       verbatimTextOutput("test_stats_rf"),
+                       h5(tags$b("Confusion Matrix:")),
+                       verbatimTextOutput("test_cf_rf")
                    )
             )
           )
