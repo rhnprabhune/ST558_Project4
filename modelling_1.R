@@ -31,7 +31,7 @@ ct_tibble <- tibble(og,new,print_string)
 #---------------------------------------------------------------------
 #Split data
 set.seed(52)
-split=0.7
+split=0.8
 # Get the indexes for training data
 train_size <- sample(nrow(data), nrow(data)*split)
 # Get training data

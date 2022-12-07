@@ -473,7 +473,6 @@ dashboardPage(skin = "red",
                                    "Exercise induced angina (exang)"="exang",
                                    "ST depression induced (oldpeak)"="oldpeak",
                                    "Slope (slope)"="slope",
-                                   "Number of major vessels colored by flourosopy (ca)"="ca",
                                    "Blood disorder (thal)"="thal"),
                                  selected=c("age","sex","chol","fbs","thalach"))
               )
@@ -492,9 +491,10 @@ dashboardPage(skin = "red",
                                             "Exercise induced angina (exang)"="exang",
                                             "ST depression induced (oldpeak)"="oldpeak",
                                             "Slope (slope)"="slope",
-                                            "Number of major vessels colored by flourosopy (ca)"="ca",
                                             "Blood disorder (thal)"="thal"),
-                                          selected=c("age","sex","chol","fbs","thalach"))
+                                          selected=c("age","sex","chol","fbs","thalach")),
+                       sliderInput("max_depth","Select the max depth of the tree",
+                                   min=2,max=10,value=6,step=1)
                    )
             ),
             column(4,
@@ -511,9 +511,10 @@ dashboardPage(skin = "red",
                                             "Exercise induced angina (exang)"="exang",
                                             "ST depression induced (oldpeak)"="oldpeak",
                                             "Slope (slope)"="slope",
-                                            "Number of major vessels colored by flourosopy (ca)"="ca",
                                             "Blood disorder (thal)"="thal"),
-                                          selected=c("age","sex","chol","fbs","thalach"))
+                                          selected=c("age","sex","chol","fbs","thalach")),
+                       sliderInput("mtry","Select the  number of variables to randomly sample as candidates at each split",
+                                   min=2,max=10,value=5,step=1)
                    )
             )
           ),
@@ -522,52 +523,59 @@ dashboardPage(skin = "red",
             column(8,align = "center",
                    box(width=NULL,
                        h4("For each of the models select the predictor variables 
-                          and other model settings above and use the button below to 
-                          train all the models."),
-                       actionButton("train","TRAIN"))
+                          and other model settings above.Use the button below to 
+                          train all the models and perform predictions on test data."),
+                       h5("NOTE: In case you need to change model parameters, follow these steps:"),
+                       h5("1.Uncheck the box below"),
+                       h5("2.Change model parameters/ predictor variables"),
+                       h5("3.Check the box below and wait till you see 'Training Complete' message"),
+                       checkboxInput(inputId="model_train",label="Train models and Predict"),
+                       textOutput("model_fits")
+                    )
             ),
             column(2)
           ),
           fluidRow(
             column(4,
-              box(width=NULL,status="danger",
-                  
+              box(width=NULL,title="Generalized Linear Model: Binary Logistic Regression",
+                  status="danger",solidHeader = TRUE,
+                  h5("Training accuracy is:"),
+                  textOutput("train_stats_lg")
               )
             ),
             column(4,
-              box(width=NULL,status="danger",
+              box(width=NULL,title="Classification Tree",
+                  status="danger",solidHeader = TRUE,
+                  h5("Training accuracy is:"),
+                  textOutput("train_stats_tree")
                        
               )
             ),
             column(4,
-              box(width=NULL,status="danger",
-                       
+              box(width=NULL,title="Random Forest Model",
+                  status="danger",solidHeader = TRUE,
+                  h5("Training accuracy is:"),
+                  textOutput("train_stats_rf")
               )
             )
           ),
           fluidRow(
-            column(2),
-            column(8,align = "center",
-                   box(width=NULL,
-                       h4("For each of the models, predict on the test set"),
-                       actionButton("predict_test_df","PREDICT"))
-            ),
-            column(2)
-          ),
-          fluidRow(
             column(4,
                    box(width=NULL,status="danger",
-                       
+                       h5("Testing accuracy is:"),
+                       textOutput("test_stats_lg")
                    )
             ),
             column(4,
                    box(width=NULL,status="danger",
-                       
+                       h5("Testing accuracy is:"),
+                       textOutput("test_stats_tree")
                    )
             ),
             column(4,
                    box(width=NULL,status="danger",
-                       
+                       h5("Testing accuracy is:"),
+                       textOutput("test_stats_rf")
                    )
             )
           )
@@ -576,7 +584,8 @@ dashboardPage(skin = "red",
         )
       )
     ), #tabItem
-    tabItem(tabName = "data"
+    tabItem(tabName = "data",
+            actionButton("abs","ASdasd")
     )
    ) #tabItems
   ) #dashboardBody

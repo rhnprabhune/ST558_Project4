@@ -187,6 +187,7 @@ function(input, output, session) {
   
   #1. Numerical Summaries data table
   output$numerical_summaries <- DT::renderDataTable({
+    
     variables_selected = input$num_summary
     df_summary <- set_up_vals()$train_df %>%
       select(all_of(variables_selected))
@@ -317,43 +318,151 @@ function(input, output, session) {
     
   })
   
-  
   #7. About - Image
   output$img <- renderImage({
     filename <- normalizePath(file.path('./images',"ecg2.png"))
-    # Return a list containing the filename and alt text
-    list(src = filename,
-         alt = "ECG image",width=1000,height=300)
+    list(src = filename, alt = "ECG image",width=1000,height=300)
   }, deleteFile = FALSE)
   
   #8. Classification Tree - Image
   output$tree <- renderImage({
     filename <- normalizePath(file.path('./images',"tree.png"))
-    # Return a list containing the filename and alt text
-    list(src = filename,
-         alt = "Tree image",width=500,height=300)
+    list(src = filename, alt = "Tree image",width=500,height=300)
   }, deleteFile = FALSE)
   
   #9. Classification Tree - Image
   output$rf <- renderImage({
     filename <- normalizePath(file.path('./images',"rf.png"))
-    # Return a list containing the filename and alt text
-    list(src = filename,
-         alt = "RF image",width=400,height=300)
+    list(src = filename,alt = "RF image",width=400,height=300)
   }, deleteFile = FALSE)
   
   
   #10. TRAINING
-  model_fits <- eventReactive(input$train, {
-    #Logistic Regression
-    
-    fit_lg <- train(target ~ .,
-                    data = train_df,
-                    method = "glm",
-                    preProcess = c("center", "scale"),
-                    trControl = trainControl(method = "cv", number = 10),
-                    family="binomial")
-    
+  model_fits <- reactiveValues(test_df=NULL,train_df=NULL,fit_lg=NULL,
+                               fit_tree=NULL,fit_rf=NULL,text_out=NULL)
+  
+  observeEvent(input$model_train,{
+    if (input$model_train) {
+      train_df <- set_up_vals()$train_df %>%
+        select(c(-gender,-cp_type,-fbs_type,-restecg_type,-thal_type,-exang_type,-target_type))
+      model_fits$train_df <- train_df %>% drop_na()
+      model_fits$test_df <- set_up_vals()$test_df %>% drop_na()
+      
+      #Logistic Regression
+      train_df_lg <- train_df %>% 
+        select(target,all_of(input$train_var1))
+      
+      model_fits$fit_lg <- train(target ~ .,
+                      data = train_df_lg,
+                      method = "glm",
+                      preProcess = c("center", "scale"),
+                      trControl = trainControl(method = "cv", number = 10),
+                      family="binomial")
+      #Classification Tree
+      train_df_tree <- train_df %>% 
+        select(target,all_of(input$train_var2))
+      
+      model_fits$fit_tree = train(target ~ ., 
+                       data=train_df_tree, 
+                       method="rpart2",
+                       preProcess = c("center", "scale"),
+                       trControl = trainControl(method = "cv",number = 10),
+                       tuneGrid = data.frame(maxdepth = input$max_depth))
+      #Random Forest
+      train_df_rf <- train_df %>% 
+        select(target,all_of(input$train_var3))
+      model_fits$fit_rf = train(target ~ ., 
+                     data=train_df_rf, 
+                     method="rf",
+                     preProcess = c("center", "scale"),
+                     trControl = trainControl(method = "cv",number = 5),
+                     tuneGrid = data.frame(mtry = input$mtry)) 
+      print("**************************************************")
+      model_fits$text_out <- "...Training Complete..."
+    }
+    if (input$model_train==0) {
+      model_fits$text_out <- ""
+    }
   })
-
+  
+  output$model_fits <- renderText({
+    model_fits$text_out
+  })
+  
+  #11. Training Stats
+  output$train_stats_lg <- renderText({
+    if (is.null(model_fits$train_df)){
+      train_accuracy_lg <- "Model not trained yet"
+    } else {
+      train_df <- model_fits$train_df
+      train_pred_lg <- predict(model_fits$fit_lg,newdata = select(train_df,-target))
+      train_accuracy_lg <- paste0(as.character(round((sum(train_pred_lg == train_df$target)
+                                                      /nrow(train_df))*100,2)),"%")
+      train_accuracy_lg  
+    }
+  })
+  
+  
+  output$train_stats_tree <- renderText({
+    if (is.null(model_fits$train_df)){
+      train_accuracy_tree <- "Model not trained yet"
+    } else {
+      train_df <- model_fits$train_df
+      train_pred_tree <- predict(model_fits$fit_tree,newdata = select(train_df,-target))
+      train_accuracy_tree <- paste0(as.character(round((sum(train_pred_tree == train_df$target)
+                                                      /nrow(train_df))*100,2)),"%")
+      train_accuracy_tree  
+    }
+  })
+  
+  output$train_stats_rf <- renderText({
+    if (is.null(model_fits$train_df)){
+      train_accuracy_rf <- "Model not trained yet"
+    } else {
+      train_df <- model_fits$train_df
+      train_pred_rf <- predict(model_fits$fit_rf,newdata = select(train_df,-target))
+      train_accuracy_rf <- paste0(as.character(round((sum(train_pred_rf == train_df$target)
+                                                        /nrow(train_df))*100,2)),"%")
+      train_accuracy_rf  
+    }
+  })
+  
+  #12.Testing Stats
+  output$test_stats_lg <- renderText({
+    if (is.null(model_fits$test_df)){
+      test_accuracy_lg <- "Model not trained yet"
+    } else {
+      test_df <- model_fits$test_df
+      test_pred_lg <- predict(model_fits$fit_lg,newdata = select(test_df,-target))
+      test_accuracy_lg <- paste0(as.character(round((sum(test_pred_lg == test_df$target)
+                                                      /nrow(test_df))*100,2)),"%")
+      test_accuracy_lg  
+    }
+  })
+  
+  
+  output$test_stats_tree <- renderText({
+    if (is.null(model_fits$test_df)){
+      test_accuracy_tree <- "Model not trained yet"
+    } else {
+      test_df <- model_fits$test_df
+      test_pred_tree <- predict(model_fits$fit_tree,newdata = select(test_df,-target))
+      test_accuracy_tree <- paste0(as.character(round((sum(test_pred_tree == test_df$target)
+                                                        /nrow(test_df))*100,2)),"%")
+      test_accuracy_tree  
+    }
+  })
+  
+  output$test_stats_rf <- renderText({
+    if (is.null(model_fits$test_df)){
+      test_accuracy_rf <- "Model not trained yet"
+    } else {
+      test_df <- model_fits$test_df
+      test_pred_rf <- predict(model_fits$fit_rf,newdata = select(test_df,-target))
+      test_accuracy_rf <- paste0(as.character(round((sum(test_pred_rf == test_df$target)
+                                                      /nrow(test_df))*100,2)),"%")
+      test_accuracy_rf  
+    }
+  })
+  
 }
