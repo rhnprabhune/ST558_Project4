@@ -670,8 +670,59 @@ dashboardPage(skin = "red",
       )
     ), #tabItem
     tabItem(tabName = "data",
-            actionButton("abs","ASdasd")
-    )
+      fluidRow(
+        column(3),
+        column(6,align = "center",
+               box(width=NULL,height=45,background="red",
+                   title="Get Dataset"
+               )
+        ),
+        column(3)
+      ),
+      fluidRow(
+        column(2),
+        column(8,
+          box(width=NULL,height=150,align="center",
+            h5("You can use this page to obtain the csv file for the dataset."),
+            h5("1. Select the variables you want from the dataset."),
+            h5("2. Select",tags$b("Offset:"),"The record number from which you want to get the data."),
+            h5("3. Select",tags$b("Count:"),"The number of record you want in your dataset"),
+            h5("4. Download CSV")
+          )
+        ),
+        column(2),
+      ),
+      fluidRow(
+        column(3,
+          box(width=NULL,
+              checkboxGroupInput("get_data","Select predictor variables:",
+                                 c("Age (age)"="age","Sex (sex)"="sex",
+                                   "Chest pain type (cp)"="cp",
+                                   "Resting blood pressure (trestbps)"="trestbps",
+                                   "Cholestrol (chol)"="chol",
+                                   "Fasting blood sugar (fbs)"="fbs",
+                                   "Resting ECG (restecg)"="restecg",
+                                   "Max. heart rate (thalach)"="thalach",
+                                   "Exercise induced angina (exang)"="exang",
+                                   "ST depression induced (oldpeak)"="oldpeak",
+                                   "Slope (slope)"="slope",
+                                   "Blood disorder (thal)"="thal"),
+                                 selected=c("age","sex","chol","fbs","thalach","cp",
+                                            "trestbps","restecg","exang","oldpeak",
+                                            "slope","thal")),
+              numericInput("offset","Select offset value",
+                           min=0,max=1020,value=0,step=1,width=300),
+              numericInput("count","Select count value",
+                           min=5,max=1025,value=100,step=1,width=300),
+              downloadButton('download',"Download CSV")
+          )
+        ),
+        column(9,
+          box(width=NULL,
+              dataTableOutput("data_csv"))
+        )
+      )
+    ) #tabItem
    ) #tabItems
   ) #dashboardBody
 ) #dashboardPage

@@ -525,7 +525,8 @@ function(input, output, session) {
     }
     test_cf_rf
   })
-  
+  #-----------------------------------------------------------------------------
+  #13. Prediction
   output$final_prediction <- renderText({
     if (is.null(model_fits$fit_lg)){
       out_str <- "Model not trained yet. Please train the model before predicting"
@@ -555,4 +556,27 @@ function(input, output, session) {
     out_str
   })
   
+  #----------------------------------------------------------------------------
+  #14. Download CSV
+  
+  # Creating a reactive context and generating "thedata" from it
+  thedata <- reactive({
+    start <- as.numeric(input$offset)
+    end <- as.numeric(input$offset) + as.numeric(input$count)
+    data_out <- data %>%
+      select(all_of(input$get_data)) %>%
+      slice(start:end)
+    data_out
+  })
+  
+  output$data_csv <- DT::renderDataTable({thedata()})
+  
+  # Download handler
+  output$download <- downloadHandler(
+    filename = function(){"thename.csv"}, 
+    content = function(fname){
+      write.csv(thedata(), fname)
+    }
+  )
+  #----------------------------------------------------------------------------
 }
