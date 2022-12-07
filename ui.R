@@ -531,6 +531,10 @@ dashboardPage(skin = "red",
                        h4("For each of the models select the predictor variables 
                           and other model settings above.Use the button below to 
                           train all the models and perform predictions on test data."),
+                       #h5("NOTE: In case you need to change model parameters, follow these steps:"),
+                       #h5("1.Uncheck the box below"),
+                       #h5("2.Change model parameters/ predictor variables"),
+                       #h5("3.Check the box below and wait till you see 'Training Complete' message"),
                        actionButton(inputId="model_train",label="Train models and Predict")
                        #textOutput("model_fits")
                     )
