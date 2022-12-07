@@ -28,7 +28,7 @@ install.packages(c("shiny","shinydashboard","tidyverse","DT","corrplot","caret")
 ### Run the app
 You can run this app without having to clone this repository. Just install the packages given above and run the following command in your R terminal
 ```
-runGitHub("ST558_Project4","rhnprabhune")
+shiny::runGitHub("ST558_Project4","rhnprabhune")
 ```
 
 I have also hosted this app. Do check it out - https://rohansrprojects.shinyapps.io/st558_project4/
