@@ -67,16 +67,16 @@ dashboardPage(skin = "red",
         column(4,
           box(width=NULL,title="Navigating the application",status="danger",solidHeader = TRUE,
             h4("The application consists of 4 tabs in the sidebar"),
-            h4("1. About: (You are here!)"),
-            h4("2. Data Exploration:"),
+            h4(tags$b("1. About:"),"(You are here!)"),
+            h4(tags$b("2. Data Exploration:")),
             h4("This page allows you to do Exploratory Data Analysis on the dataset
                which includes Quantitaive data graphs, Categorical data graphs,
                 Graphical analysis with target variable and Correlation plots."),
-            h4("3. Modeling:"),
+            h4(tags$b("3. Modeling:")),
             h4("This tab allows the user to fit 3 classificaiton models to the data: Generalized linear model,
                Classification tree and a Random Forest model. Here you can find the infomartion on each of these models,
                tune the hyperparameters of the model, check the fit statistics and perform predictive analysis."),
-            h4("4. Data:"),
+            h4(tags$b("4. Data:")),
             h4("Here you can check out the data used for this application, subset the dataset and 
                obtain a .csv file.")
           )
@@ -592,7 +592,74 @@ dashboardPage(skin = "red",
             )
           )
         ),
-        tabPanel("Prediction"
+        tabPanel("Prediction",
+          fluidRow(
+            column(2),
+            column(8,
+              box(width=NULL,
+                  selectInput("model_input","Select the model you want to use 
+                              for prediction",
+                              c("Binary Logistic Regression"="lg",
+                                "Classification Tree"="tree",
+                                "Random Forest"="rf"),selected="lg")
+              )     
+            ),
+            column(2)
+          ),
+          fluidRow(
+            column(3),
+            column(6,
+              box(width=NULL,status="danger",align="center",
+                  h4("NOTE"),
+                  h5("In the Model Fitting tab (previous tab), please train the 
+                     selected model on all the variables before proceeding with Prediction")
+              )
+            ),
+            column(3)
+          ),
+          fluidRow(
+            column(1),
+            column(5,
+              box(width=NULL,title="Select the values of predictors",
+                  numericInput("p_age","Age",min=29,max=77,value=50,step=2,
+                               width=300),
+                  selectInput("p_sex","Sex",c("Male"=1,"Female"=0),selected=1,
+                              width=300),
+                  selectInput("p_cp","Chest pain type",
+                              c("Typical Angina"=0,"Atypical Angina"=1,
+                                "Non-Anginal"=2,"Aysmptomatic"=3),selected=0,
+                              width=300),
+                  numericInput("p_trestbps","Resting Blood pressure",
+                               min=94,max=200,value=130,step=2,width=300),
+                  numericInput("p_chol","Cholestrol level",
+                               min=126,max=564,value=200,step=10,width=300),
+                  selectInput("p_fbs","Fasting blood sugar greater than 120 mg/dl",
+                              c("Yes"=1,"No"=0),selected=0,width=300),
+                  selectInput("p_restecg","Resting ECG",
+                              c("Normal"=0,"Having ST-T wave abnormality"=1,
+                                "Showing left ventricular hypertrophy"=2),
+                              selected=0,width=300),
+                  numericInput("p_thalach","Max. Heart rate",
+                               min=71,max=202,value=90,step=2,width=300),
+                  selectInput("p_exang","Exercise Induced Angina",
+                              c("Yes"=1,"No"=0),selected=0,width=300),
+                  numericInput("p_oldpeak","ST depression induced by exercise 
+                               relative to rest",
+                               min=0,max=6.2,value=4,step=0.1,width=300),
+                  selectInput("p_slope","Slope of the peak exercise ST segment",
+                              c("0"=0,"1"=1,"2"=2),selected=1,width=300),
+                  selectInput("p_thal","Blood disorder(thalassemia)",
+                              c("Normal"=1,"Fixed defect"=2,"Reversable defect"=3),
+                              selected=1,width=300),
+              )
+            ),
+            column(5,
+              box(width=NULL,title="Prediction",solidHeader=TRUE,
+                  status="danger",align="center",
+                  textOutput("final_prediction"))
+            ),
+            column(1)
+          ),
         )
       )
     ), #tabItem
