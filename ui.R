@@ -474,7 +474,9 @@ dashboardPage(skin = "red",
                                    "ST depression induced (oldpeak)"="oldpeak",
                                    "Slope (slope)"="slope",
                                    "Blood disorder (thal)"="thal"),
-                                 selected=c("age","sex","chol","fbs","thalach"))
+                                 selected=c("age","sex","chol","fbs","thalach","cp",
+                                            "trestbps","restecg","exang","oldpeak",
+                                            "slope","thal"))
               )
             ),
             column(4,
@@ -492,7 +494,9 @@ dashboardPage(skin = "red",
                                             "ST depression induced (oldpeak)"="oldpeak",
                                             "Slope (slope)"="slope",
                                             "Blood disorder (thal)"="thal"),
-                                          selected=c("age","sex","chol","fbs","thalach")),
+                                          selected=c("age","sex","chol","fbs","thalach","cp",
+                                                     "trestbps","restecg","exang","oldpeak",
+                                                     "slope","thal")),
                        sliderInput("max_depth","Select the max depth of the tree",
                                    min=2,max=10,value=6,step=1)
                    )
@@ -512,7 +516,9 @@ dashboardPage(skin = "red",
                                             "ST depression induced (oldpeak)"="oldpeak",
                                             "Slope (slope)"="slope",
                                             "Blood disorder (thal)"="thal"),
-                                          selected=c("age","sex","chol","fbs","thalach")),
+                                          selected=c("age","sex","chol","fbs","thalach","cp",
+                                                     "trestbps","restecg","exang","oldpeak",
+                                                     "slope","thal")),
                        sliderInput("mtry","Select the  number of variables to randomly sample as candidates at each split",
                                    min=2,max=10,value=5,step=1)
                    )

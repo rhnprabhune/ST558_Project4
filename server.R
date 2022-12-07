@@ -527,27 +527,31 @@ function(input, output, session) {
   })
   
   output$final_prediction <- renderText({
-    if (input$model_input == "lg"){fit <- model_fits$fit_lg}
-    else if (input$model_input == "tree"){fit <- model_fits$fit_tree}
-    else if (input$model_input == "rf"){fit <- model_fits$fit_rf}
-    
-    age <- input$p_age
-    sex <- input$p_sex
-    cp <- input$p_cp
-    trestbps <- input$p_trestbps
-    chol <- input$p_chol
-    fbs <- input$p_fbs
-    restecg <- input$p_restecg
-    thalach <- input$p_thalach
-    exang <- input$p_exang
-    oldpeak <- input$p_oldpeak
-    slope <- input$p_slope
-    thal <- input$p_thal
-    
-    test_df <- tibble(age,sex,cp,trestbps,chol,fbs,restecg,thalach,exang,oldpeak,slope,thal)
-    prediction <- predict(fit,newdata = test_df)
-    if (prediction==1){out_str = "Heart Disease"}
-    else if (prediction==0){out_str = "No Heart Disease"}
+    if (is.null(model_fits$fit_lg)){
+      out_str <- "Model not trained yet. Please train the model before predicting"
+    } else {
+      if (input$model_input == "lg"){fit <- model_fits$fit_lg}
+      else if (input$model_input == "tree"){fit <- model_fits$fit_tree}
+      else if (input$model_input == "rf"){fit <- model_fits$fit_rf}
+      
+      age <- input$p_age
+      sex <- input$p_sex
+      cp <- input$p_cp
+      trestbps <- input$p_trestbps
+      chol <- input$p_chol
+      fbs <- input$p_fbs
+      restecg <- input$p_restecg
+      thalach <- input$p_thalach
+      exang <- input$p_exang
+      oldpeak <- input$p_oldpeak
+      slope <- input$p_slope
+      thal <- input$p_thal
+      
+      test_df <- tibble(age,sex,cp,trestbps,chol,fbs,restecg,thalach,exang,oldpeak,slope,thal)
+      prediction <- predict(fit,newdata = test_df)
+      if (prediction==1){out_str = "Heart Disease"}
+      else if (prediction==0){out_str = "No Heart Disease"}
+    }
     out_str
   })
   
