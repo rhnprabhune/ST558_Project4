@@ -556,8 +556,8 @@ dashboardPage(skin = "red",
                   status="danger",solidHeader = TRUE,
                   h5(tags$b("Training accuracy:")),
                   verbatimTextOutput("train_stats_tree"),
-                  h5(tags$b("Summary:")),
-                  verbatimTextOutput("train_stats_tree_summary")
+                  h5(tags$b("Tree:")),
+                  plotOutput("train_stats_tree_summary")
                        
               )
             ),

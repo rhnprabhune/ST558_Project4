@@ -425,13 +425,13 @@ function(input, output, session) {
     }
     train_accuracy_tree
   })
-  output$train_stats_tree_summary <- renderPrint({
+  output$train_stats_tree_summary <- renderPlot({
     if (is.null(model_fits$fit_tree)){
       train_summary_tree <- "Model not trained yet"
     } else {
-      train_summary_tree <- model_fits$fit_tree
+      plot(model_fits$fit_tree$finalModel)
+      text(model_fits$fit_tree$finalModel,pretty=1,cex=0.9)
     }
-    train_summary_tree
   })
   
   
