@@ -31,4 +31,4 @@ You can run this app without having to clone this repository. Just install the p
 shiny::runGitHub("ST558_Project4","rhnprabhune")
 ```
 
-I have also hosted this app. Do check it out - https://rohansrprojects.shinyapps.io/st558_project4/
+I have also hosted this app. Do check it out - https://rohansrprojects.shinyapps.io/st558-project4-_7_dec/
