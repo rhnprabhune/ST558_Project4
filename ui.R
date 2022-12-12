@@ -566,8 +566,8 @@ dashboardPage(skin = "red",
                   status="danger",solidHeader = TRUE,
                   h5(tags$b("Training accuracy:")),
                   verbatimTextOutput("train_stats_rf"),
-                  h5(tags$b("Summary:")),
-                  verbatimTextOutput("train_stats_rf_summary")
+                  h5(tags$b("Variable Importance Plot:")),
+                  plotOutput("train_stats_rf_summary")
               )
             )
           ),

@@ -400,6 +400,7 @@ function(input, output, session) {
                                                       /nrow(train_df))*100,2)),"%")
       train_accuracy_lg  
     }
+    train_accuracy_lg
   })
   output$train_stats_lg_summary <- renderPrint({
       if (is.null(model_fits$fit_lg)){
@@ -422,6 +423,7 @@ function(input, output, session) {
                                                       /nrow(train_df))*100,2)),"%")
       train_accuracy_tree  
     }
+    train_accuracy_tree
   })
   output$train_stats_tree_summary <- renderPrint({
     if (is.null(model_fits$fit_tree)){
@@ -444,14 +446,14 @@ function(input, output, session) {
                                                         /nrow(train_df))*100,2)),"%")
       train_accuracy_rf  
     }
+    train_accuracy_rf
   })
-  output$train_stats_rf_summary <- renderPrint({
+  output$train_stats_rf_summary <- renderPlot({
     if (is.null(model_fits$fit_rf)){
       train_summary_rf <- "Model not trained yet"
     } else {
-      train_summary_rf <- model_fits$fit_rf
+      plot(varImp(model_fits$fit_rf))
     }
-    train_summary_rf
   })
   
   #-----------------------------------------------------------------------------
